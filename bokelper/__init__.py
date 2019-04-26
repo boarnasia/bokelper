@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from bokeh.io import output_notebook, show
+from bokeh.io import output_notebook, show, push_notebook
 from bokeh.models import HoverTool, Range1d, LinearAxis, RangeTool
 from bokeh.models.sources import ColumnDataSource
 from bokeh.layouts import Column, Row
@@ -10,10 +10,10 @@ import itertools
 
 from .figure import figure
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 __all__ = [
-    'output_notebook', 'show',
+    'output_notebook', 'show', 'push_notebook',
     'HoverTool', 'Range1d', 'LinearAxis', 'RangeTool',
     'ColumnDataSource',
     'Column', 'Row',

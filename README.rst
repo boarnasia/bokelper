@@ -11,7 +11,7 @@ There are some shortcut to avoide annoying import.
 
 Below elements can be imported from bokelper at once.
 
-- from bokeh.io import output_notebook, show
+- from bokeh.io import output_notebook, show, push_notebook
 - from bokeh.models import HoverTool, Range1d, LinearAxis, RangeTool
 - from bokeh.models.sources import ColumnDataSource
 - from bokeh.layouts import Column, Row
@@ -21,7 +21,7 @@ Example:
 .. code-block:: python
 
   from bokelper import (
-      output_notebook, show,
+      output_notebook, show, push_notebook,
       HoverTool, Range1d, LinearAxis, RangeTool,
       ColumnDataSource,
       Column, Row,
