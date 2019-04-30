@@ -3,6 +3,7 @@
 from bokeh.models import HoverTool
 from bokeh.models.sources import ColumnDataSource
 from bokeh.plotting.figure import Figure
+from bokeh.models.renderers import GlyphRenderer
 
 import numpy as np
 import pandas as pd
@@ -173,8 +174,47 @@ class FigureEx(Figure):
 
         return data
 
+    def grayscale(self, img: np.ndarray, bits: int) -> GlyphRenderer:
+        """plots grayscale image
+
+        Example:
+
+            >>> import bokelper as bkh
+            >>> from sklearn import datasets
+            >>> bkh.output_notebook()
+            >>>
+            >>> digits = datasets.load_digits()
+            >>> fig = bkh.figure(
+            ...     plot_width=100, plot_height=150,
+            ...     toolbar_location=None,
+            ...     tooltips=[("x", "$x"), ("y", "$y"), ("value", "@image")])
+            >>> fig.grayscale(digits['data'][0].reshape(8, 8), 4)
+            >>> bkh.show(fig)
+
+        Args:
+            img: numpy.ndarray
+                ndarray which has int columns in 2 dimentions.
+
+            bits: int
+                bit length of grayscale image
+
+        Return: GlyphRenderer
+        """
+        img = img.copy().astype('uint8')
+        w, h = img.shape
+        img_rgba = np.empty((w, h), dtype=np.uint32)
+        view = img_rgba.view(dtype=np.uint8).reshape((w, h, 4))
+        for i in range(w):
+            for j in range(h):
+                col = int(255 - ((img[i, j] / 15) * 255))
+                view[i, j, 0:3] = col
+        view[:, :, 3] = 255
+        img_rgba = np.flipud(img_rgba)
+
+        return self.image_rgba(image=[img_rgba], x=0, y=0, dw=w, dh=h)
+
 
 def figure(**kwargs):
     fig = FigureEx(**kwargs)
     return fig
-figure.__doc__ = Figure  # noqa
+figure.__doc__ = Figure.__doc__  # noqa

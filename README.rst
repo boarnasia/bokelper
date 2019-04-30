@@ -43,13 +43,16 @@ bokelper.palette(name: str = 'Category10_10')
 bokelper.muted_color(color: str, muted_alpha: float = 0.2)
   returns dict of color, muted_color and muted_alpha from given color.
   
-bokelper.figure.FigureEx.bbands(self, srs: pd.Series, window: int = 20, auto_tooltip: bool = True)
+bokelper.figure.FigureEx.bbands(srs: pd.Series, window: int = 20, auto_tooltip: bool = True)
   plots a bollinger bands
   
-bokelper.figure.FigureEx.candle(self, df: pd.DataFrame, auto_tooltip: bool = True)
+bokelper.figure.FigureEx.candle(df: pd.DataFrame, auto_tooltip: bool = True)
   plots a candle stick chart
   
-bokelper.figure.FigureEx.hist(self, srs: pd.Series, bins: int = 10, auto_tooltip: bool = True)
+bokelper.figure.FigureEx.hist(srs: pd.Series, bins: int = 10, auto_tooltip: bool = True)
   plots a histgram chart
+
+bokelper.figure.FigureEx.grayscale(self, img: np.ndarray, bits: int)
+  plots a grayscale image
 
 .. _Bokeh: https://bokeh.pydata.org/

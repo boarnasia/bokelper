@@ -1,6 +1,7 @@
 import pytest  # noqa
 import numpy as np
 import pandas as pd
+from sklearn import datasets
 
 import bokelper as bkh
 
@@ -44,4 +45,11 @@ class TestFigureEx:
         fig.hist(pd.Series(y, index=x))
 
         # test passed when process didn't make exception
+        assert True
+
+    def test_grayscale(self):
+        digits = datasets.load_digits()
+        fig = bkh.figure()
+        fig.grayscale(digits['data'][0].reshape(8, 8), 4)
+
         assert True
