@@ -133,33 +133,52 @@ class FigureEx(Figure):
             ))
 
     def hist(self, srs: pd.Series, bins: int = 10,
-             auto_tooltip: bool = True) -> dict:
-        """plots histgram chart"""
+             y_dir: str = 'top',
+             auto_tooltip: bool = True):
+        """plots histgram chart
+
+        Caveat: when y_dir is 'left' and 'bottom', y values become negative.
+
+        Args:
+            srs: pd.Series
+                series of values
+            bins: int
+                bins for histogram
+            y_dir: str one of 'top', 'right', 'bottom', 'left'
+                graph direction
+            auto_tooltip: bool
+                add tooltip if True
+        """
 
         # 分布の計算
         y, x_buf = np.histogram(srs, bins=bins)
 
-        # x を中間点に微調整。また x ラベルを作成。
-        x, x_from, x_to = [], [], []
-        for idx in range(len(x_buf) - 1):
-            x.append((x_buf[idx] + x_buf[idx + 1]) / 2)
-            x_from.append(x_buf[idx])
-            x_to.append(x_buf[idx + 1])
-
         # データソースに格納
         data = dict(
-            hist_x = x,
-            hist_y = y,
-            hist_x_from=x_from,
-            hist_x_to=x_to,
+            hist_x = (x_buf[:-1] + x_buf[1:]) / 2,
+            hist_y = y if y_dir in ['right', 'top'] else y * -1,
+            hist_x_from = x_buf[:-1],
+            hist_x_to   = x_buf[1:],
         )
         source = ColumnDataSource(data=data)
 
-        # 縦棒の幅を決定。少し細めにしてバーがかぶらないようにしています。
-        width = srs.max() / (bins * 1.4)
-
-        self.vbar(x='hist_x', width=width, top='hist_y',
-                  source=source, name='hist')
+        if y_dir == 'right':
+            self.quad(right='hist_y', left=0, bottom='hist_x_from',
+                      top='hist_x_to', source=source, name='hist',
+                      line_color='white')
+        elif y_dir == 'left':
+            self.quad(right=0, left='hist_y', bottom='hist_x_from',
+                      top='hist_x_to', source=source, name='hist',
+                      line_color='white')
+        elif y_dir == 'bottom':
+            self.quad(top=0, bottom='hist_y', left='hist_x_from',
+                      right='hist_x_to', source=source, name='hist',
+                      line_color='white')
+        else:
+            # y_dir == 'top' or something
+            self.quad(top='hist_y', bottom=0, left='hist_x_from',
+                      right='hist_x_to', source=source, name='hist',
+                      line_color='white')
 
         # 指定があればツールチップを追加
         if auto_tooltip:
@@ -168,11 +187,9 @@ class FigureEx(Figure):
                 tooltips=[
                     ('x', '@hist_x{,.2f}'),
                     ('y', '@hist_y{,}'),
-                    ('range', '@hist_x_from{,.2f} - @hist_x_from{,.2f}'),
+                    ('range', '@hist_x_from{,.2f} - @hist_x_to{,.2f}'),
                 ],
             ))
-
-        return data
 
     def grayscale(self, img: np.ndarray, bits: int) -> GlyphRenderer:
         """plots grayscale image

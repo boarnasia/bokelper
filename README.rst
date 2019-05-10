@@ -49,10 +49,14 @@ bokelper.figure.FigureEx.bbands(srs: pd.Series, window: int = 20, auto_tooltip: 
 bokelper.figure.FigureEx.candle(df: pd.DataFrame, auto_tooltip: bool = True)
   plots a candle stick chart
   
-bokelper.figure.FigureEx.hist(srs: pd.Series, bins: int = 10, auto_tooltip: bool = True)
+bokelper.figure.FigureEx.hist(srs: pd.Series, bins: int = 10, y_dir: str = 'top', auto_tooltip: bool = True)
   plots a histgram chart
 
 bokelper.figure.FigureEx.grayscale(self, img: np.ndarray, bits: int)
   plots a grayscale image
+  
+bokelper.keras.HistoryPlotter
+  plots history interactively during Keras_ model fit method running.
 
 .. _Bokeh: https://bokeh.pydata.org/
+.. _Keras: https://keras.io/
